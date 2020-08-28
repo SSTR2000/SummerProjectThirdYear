@@ -6,61 +6,39 @@ public class TrieNode {
 
     // Each Trie Node contains a Map 'child'
 
-    // where each alphabet points to a Trie
+    // where each alphabet points to a Trie which has has value as Node.
 
-    // Node.
-
-    HashMap<Character, TrieNode> child;
+    HashMap<Character, TrieNode> child;//here character is key and the TrieNode is its value
 
 
-    // 'isLast' is true if the node represents
+    // 'isEnd' is true if the node represents end of the data entered
 
-    // end of a contact
-
-    boolean isLast;
+    boolean isEnd;
 
 
     // Default Constructor
 
     public TrieNode() {
 
-        child = new HashMap<Character, TrieNode>();
+        child = new HashMap<Character, TrieNode>();//initiallizing child
 
 
-        // Initialize all the Trie nodes with NULL
+        // initially initialize all the Trie nodes with NULL
 
-        for (char i = 'a'; i <= 'z'; i++)
+        for (char i = 'a'; i <= 'z'; i++)//in this searching we will operate on lowercase font
 
-            child.put(i, null);
+            child.put(i, null);//assigning the value
 
 
-        isLast = false;
+        isEnd = false;//initially making the isEnd false
 
     }
 }
 
+//the class below is created to assign functions to trie
+public class Trie {
 
-class Trie {
-
-    TrieNode root;
-
-
-    // Insert all the Contacts into the Trie
-
-    public void insertIntoTrie(String contacts[]) {
-
-        root = new TrieNode();
-
-        int n = contacts.length;
-
-        for (int i = 0; i < n; i++) {
-
-            insert(contacts[i]);
-
-        }
-
-    }
-
+    TrieNode root;//declaring the  root for trieNode
 
     // Insert a Contact into the Trie
 
@@ -113,6 +91,21 @@ class Trie {
         }
 
     }
+    // Insert all the data into the Trie
+
+    public void insertIntoTrie(String contacts[]) {
+
+        root = new TrieNode();//initiallizing the root
+
+        int n = contacts.length;//calculating total length of data in terms of words
+
+        for (int i = 0; i < n; i++) {
+
+            insert(contacts[i]);//calling the insert function
+
+        }
+
+    }
 
 
     // This function simply displays all dictionary words
@@ -123,16 +116,14 @@ class Trie {
 
     // root to curNode.
 
-    public void displayContactsUtil(TrieNode curNode,
-
-                                    String prefix) {
+    public void displayContactsUtil(TrieNode curNode, String prefix) {
 
 
         // Check if the string 'prefix' ends at this Node
 
         // If yes then display the string found so far
 
-        if (curNode.isLast)
+        if (curNode.isEnd)
 
             System.out.println(prefix);
 
