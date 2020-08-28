@@ -109,15 +109,15 @@ class Trie {
     void isFound(String str) {
 
         TrieNode prevNode = root;
-        TrieNode nextNode = root;// for original string
 
         int len = str.length();
+        String text = "";//a string to find the original word containing the text
 
         int i;
 
         for (i = 0; i < len; i++) {
 
-
+            text += Character.toString(str.charAt(i));
             // Get the last character entered to find node followed by it
             char lastChar = str.charAt(i);
             // Find the Node corresponding to the last character of 'str' which is pointed by prevNode of the Trie
@@ -128,7 +128,7 @@ class Trie {
 
             if (curNode == null) {
 
-                System.out.println("NO!-->  YOUR WORD IS NOT FOUND.");
+                System.out.println("NO!-->  YOUR TEXT IS NOT FOUND. ");
 
                 i++;
                 flag = 1;
@@ -137,11 +137,27 @@ class Trie {
             }
             // Change prevNode for next prefix
             prevNode = curNode;
-            if (i == len - 1)
+            int a = len - 1;
+            //a loop in order to find the complete word containing youy text
+            if (i == a) {
+                for (char j = 'a'; j <= 'z'; j++) {//checking the next node according to key character
+
+                    TrieNode nextNode = prevNode.child.get(j);
+                    //if  node is not null add the character to complete the word
+
+                    if (nextNode != null) {
+                        text += Character.toString(j);
+                        j = 96;//again start from character'a'
+                        prevNode = nextNode;//assign previous node the value of nextnode
+                    }
+                }
+            }
         }
+        //if flag is still 0
+        if (flag == 0)
+            System.out.println("YES!--> YOUR TEXT IS FOUND IN WORD --> " + text);
         }
     }
-}
 
 // Main code
 
@@ -149,21 +165,21 @@ class Main {
 
     public static void main(String args[]) {
 
-        Trie trie = new Trie();
+        Trie trie = new Trie();//object of Trie class
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the passage/paragraph/line below on which you want to perform searching:\n");
 
-        String data[] = scanner.nextLine().toLowerCase().split(" ");
+        String data[] = scanner.nextLine().toLowerCase().split(" ");//string array for data
 
 
-        trie.insertDataIntoTrie(data);
+        trie.insertDataIntoTrie(data);//calling insertDataIntoTrie function
 
         System.out.println("Please enter the word below you are looking for:-\n ");
 
-        String word = scanner.nextLine().toLowerCase();
+        String word = scanner.nextLine().toLowerCase();//taking the query word/text
 
-        trie.isFound(word);
+        trie.isFound(word);//calling the isFound function
 
     }
 }
