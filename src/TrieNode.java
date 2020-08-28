@@ -36,15 +36,16 @@ public class TrieNode {
 }
 
 //the class below is created to assign functions to trie
-public class Trie {
+class Trie {
 
     TrieNode root;//declaring the  root for trieNode
+    int flag = 0;
 
-    // Insert a Contact into the Trie
+    // Insert the word  into the Trie
 
     public void insert(String s) {
 
-        int len = s.length();
+        int len = s.length();//calculating the length of each word
 
 
         // 'itr' is used to iterate the Trie Nodes
@@ -53,11 +54,9 @@ public class Trie {
 
         for (int i = 0; i < len; i++) {
 
-            // Check if the s[i] is already present in
+            // Check if the s[i] is already present in Trie
 
-            // Trie
-
-            TrieNode nextNode = itr.child.get(s.charAt(i));
+            TrieNode nextNode = itr.child.get(s.charAt(i));//getting the value of child node on basis of character key
 
             if (nextNode == null) {
 
@@ -73,172 +72,78 @@ public class Trie {
             }
 
 
-            // Move the iterator('itr') ,to point to next
-
-            // Trie Node
+            // Move the iterator('itr') ,to point to next Trie Node
 
             itr = nextNode;
 
 
             // If its the last character of the string 's'
 
-            // then mark 'isLast' as true
+            // then mark 'isEnd' as true
 
             if (i == len - 1)
 
-                itr.isLast = true;
+                itr.isEnd = true;
 
         }
 
     }
     // Insert all the data into the Trie
 
-    public void insertIntoTrie(String contacts[]) {
+    public void insertDataIntoTrie(String data[]) {
 
         root = new TrieNode();//initiallizing the root
 
-        int n = contacts.length;//calculating total length of data in terms of words
+        int n = data.length;//calculating total length of data in terms of words
 
         for (int i = 0; i < n; i++) {
 
-            insert(contacts[i]);//calling the insert function
+            insert(data[i]);//calling the insert function defined above
 
         }
 
     }
 
+    //this function tells us if the searched word is found or not
 
-    // This function simply displays all dictionary words
-
-    // going through current node.  String 'prefix'
-
-    // represents string corresponding to the path from
-
-    // root to curNode.
-
-    public void displayContactsUtil(TrieNode curNode, String prefix) {
-
-
-        // Check if the string 'prefix' ends at this Node
-
-        // If yes then display the string found so far
-
-        if (curNode.isEnd)
-
-            System.out.println(prefix);
-
-
-        // Find all the adjacent Nodes to the current
-
-        // Node and then call the function recursively
-
-        // This is similar to performing DFS on a graph
-
-        for (char i = 'a'; i <= 'z'; i++) {
-
-            TrieNode nextNode = curNode.child.get(i);
-
-            if (nextNode != null) {
-
-                displayContactsUtil(nextNode, prefix + i);
-
-            }
-
-        }
-
-    }
-
-
-    // Display suggestions after every character enter by
-
-    // the user for a given string 'str'
-
-    void displayContacts(String str) {
+    void isFound(String str) {
 
         TrieNode prevNode = root;
-
-
-        // 'flag' denotes whether the string entered
-
-        // so far is present in the Contact List
-
-
-        String prefix = "";
+        TrieNode nextNode = root;// for original string
 
         int len = str.length();
-
-
-        // Display the contact List for string formed
-
-        // after entering every character
 
         int i;
 
         for (i = 0; i < len; i++) {
 
-            // 'str' stores the string entered so far
 
-            prefix += str.charAt(i);
-
-
-            // Get the last character entered
-
-            char lastChar = prefix.charAt(i);
-
-
-            // Find the Node corresponding to the last
-
-            // character of 'str' which is pointed by
-
-            // prevNode of the Trie
+            // Get the last character entered to find node followed by it
+            char lastChar = str.charAt(i);
+            // Find the Node corresponding to the last character of 'str' which is pointed by prevNode of the Trie
 
             TrieNode curNode = prevNode.child.get(lastChar);
 
-
-            // If nothing found, then break the loop as
-
-            // no more prefixes are going to be present.
+            // If nothing found, then break the loop and set flag as 1
 
             if (curNode == null) {
 
-                System.out.println("nNo Results Found for " + prefix + "");
+                System.out.println("NO!-->  YOUR WORD IS NOT FOUND.");
 
                 i++;
-
+                flag = 1;
                 break;
 
             }
-
-
-            // If present in trie then display all
-
-            // the contacts with given prefix.
-
-            System.out.println("nSuggestions based on " + prefix + " are");
-
-            displayContactsUtil(curNode, prefix);
-
-
             // Change prevNode for next prefix
-
             prevNode = curNode;
-
+            if (i == len - 1)
         }
-
-
-        for (; i < len; i++) {
-
-            prefix += str.charAt(i);
-
-            System.out.println("nNo Results Found for" + prefix + "");
-
         }
-
     }
 }
 
-
-// Driver code
+// Main code
 
 class Main {
 
@@ -249,23 +154,16 @@ class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the passage/paragraph/line below on which you want to perform searching:\n");
 
-        String contacts[] = scanner.nextLine().toLowerCase().split(" ");
+        String data[] = scanner.nextLine().toLowerCase().split(" ");
 
 
-        trie.insertIntoTrie(contacts);
+        trie.insertDataIntoTrie(data);
 
         System.out.println("Please enter the word below you are looking for:-\n ");
 
-        String query = scanner.nextLine().toLowerCase();
+        String word = scanner.nextLine().toLowerCase();
 
-
-        // Note that the user will enter 'g' then 'e' so
-
-        // first display all the strings with prefix as 'g'
-
-        // and then all the strings with prefix as 'ge'
-
-        trie.displayContacts(query);
+        trie.isFound(word);
 
     }
 }
